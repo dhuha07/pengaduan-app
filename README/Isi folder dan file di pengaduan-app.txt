@@ -1,0 +1,60 @@
+pengaduan-app/
+│
+├── app/
+│
+├── database/
+│
+├── public/
+│   ├── assets/
+│   │   ├── css/
+│   │   ├── js/
+│   │   ├── images/
+│   │   └── icons/
+│   │
+│   └── uploads/
+│       ├── pengaduan/
+│       ├── pengguna/
+│       └── laporan/
+│
+├── resources/
+│   ├── views/
+│   │
+│   ├── layouts/
+│   │   ├── app.blade.php
+│   │   ├── navbar.blade.php
+│   │   ├── sidebar.blade.php
+│   │   └── footer.blade.php
+│   │
+│   ├── auth/
+│   │   └── login.blade.php
+│   │
+│   ├── dashboard/
+│   │   └── index.blade.php
+│   │
+│   ├── pengaduan/
+│   │   ├── index.blade.php
+│   │   ├── detail.blade.php
+│   │   ├── update-status.blade.php
+│   │   └── success-update.blade.php
+│   │
+│   ├── percakapan/
+│   │   ├── index.blade.php
+│   │   └── detail.blade.php
+│   │
+│   ├── laporan/
+│   │   └── index.blade.php
+│   │
+│   ├── pengguna/
+│   │   ├── index.blade.php
+│   │   ├── create.blade.php
+│   │   └── success-create.blade.php
+│   │
+│   └── components/
+│       ├── card.blade.php
+│       ├── modal.blade.php
+│       └── alert.blade.php
+│
+├── routes/
+│   └── web.php
+│
+└── README.md

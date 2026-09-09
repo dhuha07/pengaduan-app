@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= typeof title !== 'undefined' ? title : 'Login Admin - DPMP4KB Kota Magelang' %></title>
+
+    <link rel="stylesheet" href="/assets/css/login.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="login-wrapper">
+
+        <!-- LEFT PANEL -->
+        <div class="left-panel">
+
+            <div class="brand">
+                <img src="/assets/images/logo-magelang.png" alt="Logo">
+                <div>
+                    <h1>DPMP4KB</h1>
+                    <h3>KOTA MAGELANG</h3>
+                </div>
+            </div>
+
+            <div class="hero-content">
+                <h2>
+                    Sistem Pengaduan
+                    <br>
+                    Masyarakat
+                </h2>
+                <p>
+                    Layanan pengaduan dan perlindungan
+                    perempuan dan anak
+                </p>
+            </div>
+
+            <div class="illustration">
+                <img src="/assets/images/mother-child.png" alt="Illustration">
+            </div>
+
+            <div class="copyright">
+                © <%= new Date().getFullYear() %> DPMP4KB Kota Magelang
+            </div>
+
+        </div>
+
+        <!-- RIGHT PANEL -->
+        <div class="right-panel">
+
+            <div class="login-card">
+
+                <div class="header">
+                    <h1>Login Admin</h1>
+                    <span>Masuk untuk mengakses panel admin</span>
+                </div>
+
+                <% if (typeof error !== 'undefined' && error) { %>
+                    <div class="alert alert-danger" style="color: #ef4444; background: #fee2e2; padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 14px;">
+                        <i class="fa-solid fa-circle-exclamation"></i> <%= error %>
+                    </div>
+                <% } %>
+
+                <form action="/login" method="POST">
+
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <div class="input-box">
+                            <i class="fa-regular fa-user"></i>
+                            <input
+                                type="text"
+                                id="username"
+                                name="username"
+                                placeholder="Masukkan Username"
+                                required
+                                autocomplete="username">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-box">
+                            <i class="fa-solid fa-lock"></i>
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Masukkan Password"
+                                required
+                                autocomplete="current-password">
+                            <button
+                                type="button"
+                                class="toggle-password"
+                                id="btnTogglePassword"
+                                aria-label="Tampilkan password">
+                                <i id="eye" class="fa-regular fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="login-btn">
+                        <i class="fa-solid fa-lock"></i>
+                        Masuk
+                    </button>
+
+                </form>
+
+                <a href="#" class="forgot-password">
+                    Lupa Password?
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="/assets/css/login.js" onerror="console.warn('File JS eksternal tidak ditemukan, menggunakan fallback script.');"></script>
+    
+    <script>
+        // Inline fallback script untuk toggle password jika file JS eksternal tidak termuat
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleBtn = document.getElementById('btnTogglePassword');
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eye');
+
+            if (toggleBtn && passwordInput && eyeIcon) {
+                toggleBtn.addEventListener('click', () => {
+                    const isPassword = passwordInput.type === 'password';
+                    passwordInput.type = isPassword ? 'text' : 'password';
+                    
+                    eyeIcon.classList.toggle('fa-eye', !isPassword);
+                    eyeIcon.classList.toggle('fa-eye-slash', isPassword);
+                });
+            }
+        });
+    </script>
+
+</body>
+
+</html>

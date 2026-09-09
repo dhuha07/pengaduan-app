@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Pengaduan - DPMP4KB</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/detail-pengaduan.css">
+    
+    <!-- FONT -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- ICON -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="logo">
+            <img src="/assets/images/logo-magelang.png" alt="Logo DPMP4KB">
+            <div class="logo-text">
+                <h2>DPMP4KB</h2>
+                <span>KOTA MAGELANG</span>
+            </div>
+        </div>
+
+        <nav class="nav-menu">
+            <a href="/dashboard" class="menu">
+                <i class="fa-solid fa-house"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="/daftar-pengaduan" class="menu active">
+                <i class="fa-regular fa-file-lines"></i>
+                <span>Daftar Pengaduan</span>
+            </a>
+            <a href="/riwayat-percakapan" class="menu">
+                <i class="fa-regular fa-message"></i>
+                <span>Riwayat Percakapan</span>
+            </a>
+            <a href="/laporan" class="menu">
+                <i class="fa-regular fa-file"></i>
+                <span>Laporan</span>
+            </a>
+            <a href="/pengguna" class="menu">
+                <i class="fa-regular fa-user"></i>
+                <span>Pengguna</span>
+            </a>
+        </nav>
+
+        <a href="/login" class="logout">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span>Keluar</span>
+        </a>
+    </aside>
+
+    <!-- CONTENT -->
+    <main class="content">
+
+        <!-- HEADER -->
+        <div class="page-header">
+            <div class="header-left">
+                <button class="hamburger" id="toggleSidebar" aria-label="Toggle Navigation">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div>
+                    <h1 id="pageTitle">Detail Pengaduan</h1>
+                    <div class="breadcrumb">
+                        Dashboard / Daftar Pengaduan / Detail Pengaduan
+                    </div>
+                </div>
+            </div>
+
+            <a href="/daftar-pengaduan" class="back-btn">
+                <i class="fa-solid fa-arrow-left"></i>
+                Kembali
+            </a>
+        </div>
+
+        <!-- TOP GRID -->
+        <div class="top-grid">
+
+            <!-- INFORMASI PELAPOR -->
+            <div class="card">
+                <h3>Informasi Pelapor</h3>
+                <div class="info-list">
+                    <div class="info-item">
+                        <span>Nama</span>
+                        <strong id="pelaporNama">Memuat...</strong>
+                    </div>
+                    <div class="info-item">
+                        <span>No WhatsApp</span>
+                        <strong id="pelaporWa">Memuat...</strong>
+                    </div>
+                    <div class="info-item">
+                        <span>Alamat/Lokasi</span>
+                        <strong id="pelaporAlamat">Memuat...</strong>
+                    </div>
+                    <div class="info-item">
+                        <span>Tipe Pesan</span>
+                        <strong id="pelaporTipePesan">Memuat...</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INFORMASI KEJADIAN -->
+            <div class="card">
+                <h3>Informasi Kejadian</h3>
+                <div class="info-list">
+                    <div class="info-item">
+                        <span>Jenis Kasus</span>
+                        <strong id="kejadianKasus">Memuat...</strong>
+                    </div>
+                    <div class="info-item">
+                        <span>Lokasi Kejadian</span>
+                        <strong id="kejadianLokasi">Memuat...</strong>
+                    </div>
+                    <div class="info-item">
+                        <span>Waktu Kejadian</span>
+                        <strong id="kejadianWaktu">Memuat...</strong>
+                    </div>
+                    <div class="info-item">
+                        <span>Pelaku</span>
+                        <strong id="kejadianPelaku">Memuat...</strong>
+                    </div>
+                    <div class="info-item">
+                        <span>Tingkat Bahaya</span>
+                        <span id="kejadianUrgensi" class="badge warning">NORMAL</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AKSI CEPAT -->
+            <div class="card action-card">
+                <h3>Aksi Cepat</h3>
+                <div class="action-buttons">
+                    <a id="btnUpdateStatus" href="/update-status" class="btn green">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        <span>Update Status</span>
+                    </a>
+
+                    <a id="btnWa" href="#" target="_blank" rel="noopener noreferrer" class="btn whatsapp">
+                        <i class="fa-brands fa-whatsapp"></i>
+                        <span>Buka WhatsApp</span>
+                    </a>
+
+                    <a href="/riwayat-percakapan" class="btn blue">
+                        <i class="fa-regular fa-message"></i>
+                        <span>Riwayat Percakapan</span>
+                    </a>
+
+                    <button class="btn gray" onclick="alert('Fitur catatan admin dalam pengembangan.')">
+                        <i class="fa-regular fa-note-sticky"></i>
+                        <span>Catatan Admin</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- MIDDLE GRID -->
+        <div class="middle-grid">
+
+            <!-- KRONOLOGI / DETAIL KEKERASAN -->
+            <div class="card">
+                <h3>Kronologi / Detail Kekerasan</h3>
+                <p id="kronologiText" class="description">Memuat data kronologi...</p>
+            </div>
+
+            <!-- INDIKATOR BAHAYA -->
+            <div class="card">
+                <h3>Indikator Bahaya & Status Validasi</h3>
+                <div class="danger-box">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span id="indikatorText">
+                        Status Validasi: <b id="statusValidasiText">Memuat...</b>
+                    </span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- BOTTOM GRID -->
+        <div class="bottom-grid">
+
+            <div class="card">
+                <h3>Lampiran (Jika Ada)</h3>
+                <div id="lampiranContainer">
+                    <p>Tidak ada lampiran</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Riwayat Laporan Sebelumnya</h3>
+                <p>Belum pernah membuat laporan sebelumnya</p>
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const reportId = urlParams.get('id');
+
+        const sidebar = document.getElementById("sidebar");
+        const toggleBtn = document.getElementById("toggleSidebar");
+
+        if (localStorage.getItem("sidebar") === "collapsed" && sidebar) {
+            sidebar.classList.add("collapsed");
+        }
+
+        if (toggleBtn) {
+            toggleBtn.addEventListener("click", () => {
+                sidebar.classList.toggle("collapsed");
+                localStorage.setItem("sidebar", sidebar.classList.contains("collapsed") ? "collapsed" : "open");
+            });
+        }
+
+        const formatText = (val) => {
+            if (val === null || val === undefined || String(val).trim() === '' || val === '-') {
+                return 'Tidak Ada Data';
+            }
+            return val;
+        };
+
+        async function loadDetailPengaduan() {
+            if (!reportId || reportId === 'undefined' || reportId === 'null') {
+                alert('ID Laporan tidak ditemukan pada URL! Kembali ke Daftar Pengaduan.');
+                window.location.href = '/daftar-pengaduan';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/pengaduan/${reportId}`);
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    alert(`Perhatian: ${result.message || 'Data tidak ditemukan.'}`);
+                    return;
+                }
+
+                const data = result.data;
+
+                document.getElementById('pageTitle').innerText = `Detail Pengaduan #${data.id}`;
+                document.getElementById('pelaporNama').innerText = formatText(data.nama_pelapor);
+                document.getElementById('pelaporWa').innerText = formatText(data.nomor_wa);
+                document.getElementById('pelaporAlamat').innerText = formatText(data.lokasi_kejadian);
+                document.getElementById('pelaporTipePesan').innerText = formatText(data.tipe_pesan);
+
+                document.getElementById('kejadianKasus').innerText = formatText(data.kategori_kasus);
+                document.getElementById('kejadianLokasi').innerText = formatText(data.lokasi_kejadian);
+                document.getElementById('kejadianWaktu').innerText = formatText(data.waktu_kejadian);
+                document.getElementById('kejadianPelaku').innerText = formatText(data.pelaku);
+
+                const urgensiElem = document.getElementById('kejadianUrgensi');
+                const rawUrgensi = String(data.tingkat_urgensi || 'NORMAL').toUpperCase();
+                urgensiElem.innerText = rawUrgensi;
+                urgensiElem.className = `badge ${rawUrgensi.includes('DARURAT') || rawUrgensi.includes('HIGH') ? 'danger' : 'warning'}`;
+
+                const statusValElem = document.getElementById('statusValidasiText');
+                if (statusValElem) {
+                    statusValElem.innerText = formatText(data.status_validasi || data.status);
+                }
+                
+                document.getElementById('kronologiText').innerText = formatText(data.detail_kekerasan || data.kronologi);
+
+                if (data.nomor_wa) {
+                    const cleanPhone = String(data.nomor_wa).replace(/[^0-9]/g, '');
+                    const formattedPhone = cleanPhone.startsWith('0') ? '62' + cleanPhone.slice(1) : cleanPhone;
+                    const waMessage = encodeURIComponent(`Halo ${data.nama_pelapor || 'Pelapor'}, mengenai laporan pengaduan Anda (#${data.id})...`);
+                    document.getElementById('btnWa').href = `https://wa.me/${formattedPhone}?text=${waMessage}`;
+                }
+
+                document.getElementById('btnUpdateStatus').href = `/update-status?id=${data.id}`;
+
+            } catch (error) {
+                console.error('[CLIENT ERROR] Load Detail Pengaduan:', error);
+                alert(`Gagal memuat data.\nPesan: ${error.message}`);
+            }
+        }
+
+        loadDetailPengaduan();
+    });
+</script>
+
+</body>
+</html>

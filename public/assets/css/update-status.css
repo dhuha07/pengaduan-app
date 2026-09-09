@@ -1,0 +1,662 @@
+/* =========================
+   RESET
+========================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:#f4f6fb;
+}
+
+/* =========================
+   LAYOUT
+========================= */
+
+.container{
+    display:flex;
+    min-height:100vh;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar{
+    width:270px;
+    background:#1f3f99;
+    color:white;
+    padding:30px 20px;
+
+    display:flex;
+    flex-direction:column;
+
+    transition:.3s;
+}
+
+/* COLLAPSED */
+
+.sidebar.collapsed{
+    width:90px;
+}
+
+.sidebar.collapsed .logo-text,
+.sidebar.collapsed .menu span,
+.sidebar.collapsed .logout span{
+    display:none;
+}
+
+.sidebar.collapsed .menu,
+.sidebar.collapsed .logout{
+    justify-content:center;
+}
+
+/* LOGO */
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:50px;
+}
+
+.logo img{
+    width:55px;
+}
+
+.logo h2{
+    font-size:28px;
+}
+
+.logo span{
+    font-size:14px;
+    opacity:.8;
+}
+
+/* MENU */
+
+.nav-menu{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.menu{
+    display:flex;
+    align-items:center;
+    gap:15px;
+
+    padding:16px 18px;
+
+    border-radius:14px;
+
+    color:white;
+    text-decoration:none;
+    font-weight:500;
+
+    transition:.3s;
+}
+
+.menu:hover{
+    background:rgba(255,255,255,.1);
+}
+
+.menu.active{
+    background:#18b451;
+}
+
+/* LOGOUT */
+
+.logout{
+    margin-top:auto;
+
+    display:flex;
+    align-items:center;
+    gap:15px;
+
+    padding:16px 18px;
+
+    color:white;
+    text-decoration:none;
+    font-weight:500;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content{
+    flex:1;
+    padding:35px;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.page-header{
+    margin-bottom:30px;
+}
+
+.header-left{
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+.page-header h1{
+    font-size:42px;
+    font-weight:700;
+}
+
+.breadcrumb{
+    margin-top:8px;
+    color:#777;
+    font-size:14px;
+}
+
+/* =========================
+   HAMBURGER
+========================= */
+
+.hamburger{
+    width:45px;
+    height:45px;
+
+    border:none;
+    border-radius:10px;
+
+    background:#fff;
+
+    cursor:pointer;
+    font-size:18px;
+
+    box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
+/* =========================
+   CARD
+========================= */
+
+.form-card{
+    background:white;
+    border-radius:24px;
+    padding:35px;
+
+    box-shadow:0 5px 20px rgba(0,0,0,.05);
+}
+
+/* TITLE */
+
+.report-info h2,
+.update-form h2{
+    font-size:34px;
+    margin-bottom:30px;
+}
+
+/* =========================
+   INFO
+========================= */
+
+.info-grid{
+    display:flex;
+    flex-direction:column;
+    gap:25px;
+}
+
+.info-item{
+    display:flex;
+    gap:50px;
+}
+
+.info-item span{
+    width:220px;
+    color:#555;
+    font-size:17px;
+}
+
+.info-item strong{
+    font-size:17px;
+}
+
+/* LINE */
+
+hr{
+    margin:35px 0;
+    border:none;
+    border-top:1px solid #ddd;
+}
+
+/* =========================
+   FORM
+========================= */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:30px;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+
+    margin-bottom:25px;
+}
+
+.form-group label{
+    font-size:18px;
+    font-weight:600;
+}
+
+.form-group span{
+    color:red;
+}
+
+.form-group select,
+.form-group textarea{
+    width:100%;
+
+    border:1px solid #dcdcdc;
+    border-radius:16px;
+
+    padding:18px;
+
+    font-size:16px;
+    outline:none;
+}
+
+.form-group select{
+    height:60px;
+}
+
+.form-group textarea{
+    min-height:140px;
+    resize:none;
+}
+
+.full{
+    width:100%;
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+.button-group{
+    display:flex;
+    justify-content:flex-end;
+    gap:15px;
+
+    margin-top:10px;
+}
+
+.btn{
+    padding:14px 30px;
+
+    border:none;
+    border-radius:12px;
+
+    font-size:16px;
+    font-weight:600;
+
+    cursor:pointer;
+    text-decoration:none;
+
+    transition:.3s;
+}
+
+/* CANCEL */
+
+.cancel{
+    background:#f1f1f1;
+    color:#222;
+}
+
+.cancel:hover{
+    background:#e5e5e5;
+}
+
+/* SAVE */
+
+.save{
+    background:#18b451;
+    color:white;
+}
+
+.save:hover{
+    background:#149845;
+}
+
+/* =========================
+   SUCCESS MODAL
+========================= */
+
+.success-modal{
+    position:fixed;
+    inset:0;
+
+    background:rgba(0,0,0,.55);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    opacity:0;
+    visibility:hidden;
+
+    transition:.3s;
+    z-index:999;
+}
+
+/* SHOW */
+
+.success-modal.show{
+    opacity:1;
+    visibility:visible;
+}
+
+/* BOX */
+
+.success-box{
+    width:520px;
+    background:white;
+
+    border-radius:24px;
+
+    padding:50px 40px;
+
+    text-align:center;
+
+    animation:popup .4s ease;
+}
+
+/* POPUP */
+
+@keyframes popup{
+
+    from{
+        transform:scale(.8);
+        opacity:0;
+    }
+
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+
+}
+
+/* TITLE */
+
+.success-box h2{
+    font-size:32px;
+
+    margin-top:25px;
+    margin-bottom:10px;
+
+    color:#111;
+}
+
+/* TEXT */
+
+.success-box p{
+    color:#666;
+    font-size:16px;
+
+    margin-bottom:35px;
+}
+
+/* OK BUTTON */
+
+.ok-btn{
+    width:180px;
+    height:55px;
+
+    border:none;
+    border-radius:14px;
+
+    background:#18b451;
+    color:white;
+
+    font-size:20px;
+    font-weight:600;
+
+    cursor:pointer;
+    transition:.3s;
+}
+
+.ok-btn:hover{
+    background:#149845;
+}
+
+/* =========================
+   CHECK ANIMATION
+========================= */
+
+.checkmark{
+    width:110px;
+    height:110px;
+
+    display:block;
+    margin:auto;
+}
+
+/* CIRCLE */
+
+.checkmark-circle{
+    fill:none;
+
+    stroke:#18b451;
+    stroke-width:3;
+
+    stroke-dasharray:166;
+    stroke-dashoffset:166;
+
+    animation:stroke .6s forwards;
+}
+
+/* CHECK */
+
+.checkmark-check{
+    fill:none;
+
+    stroke:#18b451;
+    stroke-width:4;
+
+    stroke-linecap:round;
+    stroke-linejoin:round;
+
+    stroke-dasharray:48;
+    stroke-dashoffset:48;
+
+    animation:stroke .4s .6s forwards;
+}
+
+/* STROKE */
+
+@keyframes stroke{
+
+    to{
+        stroke-dashoffset:0;
+    }
+
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:992px){
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:768px){
+
+    .container{
+        flex-direction:column;
+    }
+
+    .sidebar{
+        width:100%;
+    }
+
+    .content{
+        padding:20px;
+    }
+
+    .header-left{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .page-header h1{
+        font-size:32px;
+    }
+
+    .info-item{
+        flex-direction:column;
+        gap:8px;
+    }
+
+    .success-box{
+        width:95%;
+        padding:40px 25px;
+    }
+
+    .success-box h2{
+        font-size:24px;
+    }
+
+}
+/* =========================
+   SUCCESS MODAL
+========================= */
+.success-modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.55);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    opacity:0;
+    visibility:hidden;
+
+    transition:.3s;
+    z-index:999;
+}
+
+.success-modal.show{
+    opacity:1;
+    visibility:visible;
+}
+
+/* BOX */
+
+.success-box{
+    width:520px;
+    background:white;
+    border-radius:24px;
+    padding:50px 40px;
+    text-align:center;
+
+    animation:popup .4s ease;
+}
+@keyframes popup{
+
+    from{
+        transform:scale(.8);
+        opacity:0;
+    }
+
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+
+}
+/* CHECK SVG */
+.checkmark{
+    width:110px;
+    height:110px;
+
+    display:block;
+    margin:auto;
+}
+/* CIRCLE */
+.checkmark-circle{
+    fill:none;
+
+    stroke:#18b451;
+    stroke-width:3;
+
+    stroke-dasharray:166;
+    stroke-dashoffset:166;
+
+    animation:stroke .6s forwards;
+}
+/* CHECK */
+.checkmark-check{
+    fill:none;
+
+    stroke:#18b451;
+    stroke-width:4;
+
+    stroke-linecap:round;
+    stroke-linejoin:round;
+
+    stroke-dasharray:48;
+    stroke-dashoffset:48;
+
+    animation:stroke .4s .6s forwards;
+}
+/* ANIMATION */
+
+@keyframes stroke{
+
+    to{
+        stroke-dashoffset:0;
+    }
+
+}
+/* TEXT */
+.success-box h2{
+    font-size:32px;
+    margin-top:25px;
+    margin-bottom:10px;
+}
+
+.success-box p{
+    color:#666;
+    margin-bottom:35px;
+}
+/* BUTTON */
+.ok-btn{
+    width:180px;
+    height:55px;
+
+    border:none;
+    border-radius:14px;
+
+    background:#18b451;
+    color:white;
+
+    font-size:20px;
+    font-weight:600;
+
+    cursor:pointer;
+}
+.ok-btn:hover{
+    background:#149845;
+}

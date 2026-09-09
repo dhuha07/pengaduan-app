@@ -1,0 +1,274 @@
+/* ==========================================================================
+   RESET & BASE STYLES
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+.form-container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==========================================================================
+   TOP BAR HEADER & BREADCRUMBS
+   ========================================================================== */
+.form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 40px;
+    border-bottom: 1px solid #000000;
+    background-color: #ffffff;
+}
+
+.header-left h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #000000;
+}
+
+.breadcrumb {
+    font-size: 16px;
+    font-weight: 500;
+    color: #000000;
+    margin-top: 6px;
+}
+
+.breadcrumb .active {
+    font-weight: 600;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.admin-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.user-avatar {
+    font-size: 20px;
+    color: #000000;
+}
+
+.admin-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #000000;
+}
+
+.arrow-down {
+    font-size: 12px;
+    color: #000000;
+}
+
+/* ==========================================================================
+   FORM CONTROLS & FIELD INPUTS
+   ========================================================================== */
+.form-body {
+    flex: 1;
+    padding: 40px;
+    max-width: 100%;
+}
+
+.input-group {
+    margin-bottom: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.input-group label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #000000;
+}
+
+.input-group label .required {
+    color: #ef4444;
+    margin-left: 2px;
+}
+
+.input-group input[type="text"],
+.input-group input[type="tel"] {
+    width: 100%;
+    padding: 14px 24px;
+    font-size: 15px;
+    border: 1px solid #737373;
+    border-radius: 14px;
+    color: #000000;
+    outline: none;
+    background-color: #ffffff;
+}
+
+.input-group textarea {
+    width: 100%;
+    padding: 16px 24px;
+    font-size: 15px;
+    border: 1px solid #737373;
+    border-radius: 14px;
+    color: #000000;
+    outline: none;
+    resize: none;
+    background-color: #ffffff;
+}
+
+.input-group input::placeholder,
+.input-group textarea::placeholder {
+    color: #a3a3a3;
+}
+
+/* ==========================================================================
+   ACTION FOOTER NAVIGATION BUTTONS
+   ========================================================================== */
+.form-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 24px;
+    padding-top: 12px;
+}
+
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 28px;
+    border: 1px solid #000000;
+    border-radius: 12px;
+    background-color: #ffffff;
+    color: #000000;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.footer-right {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.btn-cancel {
+    padding: 12px 44px;
+    border: 1px solid #000000;
+    border-radius: 12px;
+    background-color: #ffffff;
+    color: #000000;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-submit {
+    padding: 12px 40px;
+    border: none;
+    border-radius: 12px;
+    background-color: #13a453;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* ==========================================================================
+   MODAL DIALOG (image_a0c2b5.png Precision)
+   ========================================================================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.55); /* Latar belakang redup/gelap */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease-in-out;
+}
+
+/* Mengaktifkan modal via JS */
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-card {
+    background-color: #ffffff;
+    width: 520px;
+    padding: 40px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    transform: scale(0.9);
+    transition: transform 0.25s ease-in-out;
+}
+
+.modal-overlay.active .modal-card {
+    transform: scale(1);
+}
+
+/* Icon Centang Hijau */
+.success-icon-wrapper {
+    font-size: 72px;
+    color: #13a453;
+    margin-bottom: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.modal-card h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #000000;
+    margin-bottom: 8px;
+    letter-spacing: -0.2px;
+}
+
+.modal-card p {
+    font-size: 14px;
+    font-weight: 500;
+    color: #000000;
+    margin-bottom: 32px;
+}
+
+/* Tombol Hijau Lebar di Dalam Modal */
+.btn-modal-ok {
+    width: 100%;
+    max-width: 120px;
+    padding: 10px 0;
+    background-color: #13a453;
+    border: none;
+    color: #ffffff;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    transition: background 0.15s;
+}
+
+.btn-modal-ok:hover {
+    background-color: #0f8542;
+}

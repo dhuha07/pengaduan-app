@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title || 'Laporan - DPMP4KB' %></title>
+    
+    <link rel="stylesheet" href="/assets/css/laporan.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+
+    <aside class="sidebar" id="sidebar">
+        <div class="logo">
+            <img src="/assets/images/logo-magelang.png" alt="Logo">
+            <div class="logo-text">
+                <h2>DPMP4KB</h2>
+                <span>KOTA MAGELANG</span>
+            </div>
+        </div>
+
+        <nav class="nav-menu">
+            <a href="/dashboard" class="menu">
+                <i class="fa-solid fa-house"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="/daftar-pengaduan" class="menu">
+                <i class="fa-regular fa-file-lines"></i>
+                <span>Daftar Pengaduan</span>
+            </a>
+            <a href="/riwayat-percakapan" class="menu">
+                <i class="fa-regular fa-message"></i>
+                <span>Riwayat Percakapan</span>
+            </a>
+            <a href="/laporan" class="menu active">
+                <i class="fa-regular fa-file"></i>
+                <span>Laporan</span>
+            </a>
+            <a href="/pengguna" class="menu">
+                <i class="fa-regular fa-user"></i>
+                <span>Pengguna</span>
+            </a>
+        </nav>
+
+        <a href="/logout" class="logout">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span>Keluar</span>
+        </a>
+    </aside>
+
+    <main class="content">
+
+        <!-- Container tersembunyi untuk oper data dari EJS ke Client JS -->
+        <div id="initialDataContainer" data-initial="<%- JSON.stringify(typeof initialData !== 'undefined' ? initialData : []) %>" style="display: none;"></div>
+
+        <div class="report-header">
+            <div class="header-title">
+                <h1>Laporan</h1>
+                <p>Rekapitulasi data pengaduan</p>
+            </div>
+            <div class="header-controls">
+                <div class="date-input-wrapper">
+                    <input type="text" id="filterDateRange" class="control-input" placeholder="01/01/2024 - 01/05/2026">
+                    <i class="fa-regular fa-calendar"></i>
+                </div>
+                <div class="select-wrapper">
+                    <select id="filterKasus" class="control-select">
+                        <option value="">Semua Jenis Kasus</option>
+                    </select>
+                </div>
+                <button class="btn-export" onclick="exportReportToPDF()">
+                    <i class="fa-regular fa-file-lines"></i> Export PDF
+                </button>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="card">
+                <div class="card-icon icon-total"><i class="fa-regular fa-user"></i></div>
+                <div class="card-info">
+                    <h3>Total Laporan</h3>
+                    <div class="count" id="statTotal">0</div>
+                    <div class="trend" id="trendTotal">Data Realtime</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-icon icon-baru"><i class="fa-regular fa-file-alt"></i></div>
+                <div class="card-info">
+                    <h3>Laporan Baru</h3>
+                    <div class="count" id="statBaru">0</div>
+                    <div class="trend" id="trendBaru">Menunggu Validasi</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-icon icon-proses"><i class="fa-regular fa-file-alt"></i></div>
+                <div class="card-info">
+                    <h3>Diproses</h3>
+                    <div class="count" id="statProses">0</div>
+                    <div class="trend" id="trendProses">Dalam Penanganan</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-icon icon-selesai"><i class="fa-regular fa-user"></i></div>
+                <div class="card-info">
+                    <h3>Selesai</h3>
+                    <div class="count" id="statSelesai">0</div>
+                    <div class="trend" id="trendSelesai">Telah Ditangani</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-container">
+                <h3>Jumlah Laporan Per Hari</h3>
+                <div class="chart-wrapper-bars">
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3>Laporan Berdasarkan Jenis Kasus</h3>
+                <div class="pie-layout">
+                    <div class="pie-chart-wrapper">
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                    <div class="pie-legend" id="pieLegendContainer"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-section">
+            <h2>Rekapitulasi per jenis kasus</h2>
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th align="left">Jenis Kasus</th>
+                        <th width="15%">Total</th>
+                        <th width="15%">Darurat</th>
+                        <th width="15%">Diproses</th>
+                        <th width="15%">Selesai</th>
+                    </tr>
+                </thead>
+                <tbody id="rekapTableBody">
+                    <tr>
+                        <td colspan="5" style="text-align: center;">Memuat data rekapitulasi...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+const dataElem = document.getElementById('initialDataContainer');
+let rawDataPengaduan = [];
+
+try {
+    rawDataPengaduan = dataElem ? JSON.parse(dataElem.dataset.initial || '[]') : [];
+} catch (err) {
+    console.error('Gagal membaca data awal:', err);
+    rawDataPengaduan = [];
+}
+
+let barChartInstance = null;
+let pieChartInstance = null;
+
+const caseColors = {
+    'KDRT Fisik': '#ef4444',
+    'KDRT Ekonomi': '#0ea5e9',
+    'KDRT Psikis': '#f59e0b',
+    'Kekerasan Anak': '#10b981',
+    'Penelantaran': '#8b5cf6',
+    'Layanan Administrasi': '#3b82f6',
+    'TPPO': '#ec4899',
+    'Kekerasan Perempuan': '#f43f5e',
+    'KDRT': '#d97706',
+    'Perkawinan Anak': '#14b8a6'
+};
+
+function getColorForCategory(cat) {
+    if (caseColors[cat]) return caseColors[cat];
+    let hash = 0;
+    for (let i = 0; i < cat.length; i++) {
+        hash = cat.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const color = '#' + (hash & 0x00FFFFFF).toString(16).padStart(6, '0');
+    caseColors[cat] = color;
+    return color;
+}
+
+function getItemCategory(item) {
+    return item.kategori_kasus || item.kategori || item.jenis_kasus || item.kategoriKasus || 'Lainnya';
+}
+
+function getItemStatus(item) {
+    return (item.status_validasi || item.status || item.statusPengaduan || '').toLowerCase();
+}
+
+function getItemUrgensi(item) {
+    return (item.tingkat_urgensi || item.urgensi || item.prioritas || '').toLowerCase();
+}
+
+function getItemDate(item) {
+    const rawDate = item.created_at || item.tanggal_pengaduan || item.tanggal || item.createdAt;
+    if (!rawDate) return null;
+    const d = new Date(rawDate);
+    return isNaN(d.getTime()) ? null : d.toISOString().split('T')[0];
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (rawDataPengaduan && rawDataPengaduan.length > 0) {
+        populateFilterOptions(rawDataPengaduan);
+        renderFilteredData();
+    } else {
+        fetchLaporanData();
+    }
+
+    const filterElem = document.getElementById('filterKasus');
+    if (filterElem) {
+        filterElem.addEventListener('change', renderFilteredData);
+    }
+});
+
+async function fetchLaporanData() {
+    try {
+        const response = await fetch('/api/pengaduan');
+        if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+        
+        const result = await response.json();
+
+        if (Array.isArray(result)) {
+            rawDataPengaduan = result;
+        } else if (result && Array.isArray(result.data)) {
+            rawDataPengaduan = result.data;
+        } else if (result && Array.isArray(result.pengaduan)) {
+            rawDataPengaduan = result.pengaduan;
+        } else {
+            console.error('Format data API tidak dikenali:', result);
+            rawDataPengaduan = [];
+        }
+
+        populateFilterOptions(rawDataPengaduan);
+        renderFilteredData();
+
+    } catch (err) {
+        console.error('Gagal mengambil data API:', err);
+    }
+}
+
+function populateFilterOptions(data) {
+    const filterElem = document.getElementById('filterKasus');
+    if (!filterElem) return;
+
+    const categories = new Set();
+    data.forEach(item => {
+        const cat = getItemCategory(item);
+        if (cat) categories.add(cat);
+    });
+
+    filterElem.innerHTML = '<option value="">Semua Jenis Kasus</option>';
+    categories.forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = cat;
+        filterElem.appendChild(opt);
+    });
+}
+
+function renderFilteredData() {
+    const filterElem = document.getElementById('filterKasus');
+    const selectedKasus = filterElem ? filterElem.value : '';
+    
+    let filteredData = rawDataPengaduan;
+    if (selectedKasus) {
+        filteredData = rawDataPengaduan.filter(item => 
+            getItemCategory(item).toLowerCase() === selectedKasus.toLowerCase()
+        );
+    }
+
+    updateCards(filteredData);
+    renderBarChart(filteredData);
+    renderPieChart(filteredData);
+    renderRekapTable(filteredData);
+}
+
+function updateCards(data) {
+    let baru = 0, proses = 0, selesai = 0;
+
+    data.forEach(item => {
+        const st = getItemStatus(item);
+        if (st === 'baru' || st === 'menunggu' || st === 'pending') baru++;
+        else if (st === 'diproses' || st === 'proses' || st === 'sedang diproses') proses++;
+        else if (st === 'selesai' || st === 'ditangani') selesai++;
+    });
+
+    const statTotal = document.getElementById('statTotal');
+    const statBaru = document.getElementById('statBaru');
+    const statProses = document.getElementById('statProses');
+    const statSelesai = document.getElementById('statSelesai');
+
+    if (statTotal) statTotal.innerText = data.length;
+    if (statBaru) statBaru.innerText = baru;
+    if (statProses) statProses.innerText = proses;
+    if (statSelesai) statSelesai.innerText = selesai;
+}
+
+function renderBarChart(data) {
+    if (typeof Chart === 'undefined') return;
+    const canvas = document.getElementById('barChart');
+    if (!canvas) return;
+
+    const countsByDate = {};
+    data.forEach(item => {
+        const dateStr = getItemDate(item);
+        if (dateStr) {
+            countsByDate[dateStr] = (countsByDate[dateStr] || 0) + 1;
+        }
+    });
+
+    const labels = Object.keys(countsByDate).sort();
+    const chartValues = labels.map(date => countsByDate[date]);
+
+    const ctx = canvas.getContext('2d');
+    if (barChartInstance) barChartInstance.destroy();
+
+    barChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels.length ? labels : ['Tidak Ada Data'],
+            datasets: [{
+                label: 'Jumlah Laporan',
+                data: chartValues.length ? chartValues : [0],
+                backgroundColor: '#2563eb',
+                borderRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: { beginAtZero: true, ticks: { precision: 0 } }
+            }
+        }
+    });
+}
+
+function renderPieChart(data) {
+    if (typeof Chart === 'undefined') return;
+    const canvas = document.getElementById('pieChart');
+    if (!canvas) return;
+
+    const categoryCounts = {};
+    const total = data.length;
+
+    data.forEach(item => {
+        const cat = getItemCategory(item);
+        categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
+    });
+
+    const labels = Object.keys(categoryCounts);
+    const values = Object.values(categoryCounts);
+    const backgroundColors = labels.map(l => getColorForCategory(l));
+
+    const ctx = canvas.getContext('2d');
+    if (pieChartInstance) pieChartInstance.destroy();
+
+    pieChartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: values.length ? values : [1],
+                backgroundColor: values.length ? backgroundColors : ['#cbd5e1'],
+                borderWidth: 2,
+                borderColor: '#ffffff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { 
+                legend: { display: false },
+                datalabels: { display: false }
+            },
+            cutout: '65%'
+        }
+    });
+
+    const legendContainer = document.getElementById('pieLegendContainer');
+    if (!legendContainer) return;
+    
+    legendContainer.innerHTML = '';
+
+    if (labels.length === 0) {
+        legendContainer.innerHTML = '<p style="font-size: 12px; color: #94a3b8;">Tidak ada data</p>';
+        return;
+    }
+
+    labels.forEach((label, idx) => {
+        const val = values[idx];
+        const pct = total > 0 ? Math.round((val / total) * 100) : 0;
+        const color = backgroundColors[idx];
+
+        const row = document.createElement('div');
+        row.className = 'legend-row';
+        row.innerHTML = `
+            <div class="legend-label">
+                <span class="legend-color" style="background: ${color};"></span>
+                <span>${label}</span>
+            </div>
+            <div class="legend-value">
+                <span>${val}</span>
+                <span>(${pct}%)</span>
+            </div>
+        `;
+        legendContainer.appendChild(row);
+    });
+}
+
+function renderRekapTable(data) {
+    const tbody = document.getElementById('rekapTableBody');
+    if (!tbody) return;
+
+    const rekapMap = {};
+
+    data.forEach(item => {
+        const cat = getItemCategory(item);
+        const st = getItemStatus(item);
+        const urg = getItemUrgensi(item);
+
+        if (!rekapMap[cat]) {
+            rekapMap[cat] = { total: 0, darurat: 0, proses: 0, selesai: 0 };
+        }
+
+        rekapMap[cat].total++;
+        if (urg === 'darurat' || urg === 'tinggi' || urg === 'high') rekapMap[cat].darurat++;
+        if (st === 'diproses' || st === 'proses' || st === 'sedang diproses') rekapMap[cat].proses++;
+        if (st === 'selesai' || st === 'ditangani') rekapMap[cat].selesai++;
+    });
+
+    tbody.innerHTML = '';
+
+    const categories = Object.keys(rekapMap);
+    if (categories.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #94a3b8;">Tidak ada data rekapitulasi.</td></tr>';
+        return;
+    }
+
+    categories.forEach(cat => {
+        const row = rekapMap[cat];
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td style="text-align: left; font-weight: 500;">${cat}</td>
+            <td>${row.total}</td>
+            <td>${row.darurat}</td>
+            <td>${row.proses}</td>
+            <td>${row.selesai}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function exportReportToPDF() {
+    window.print();
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= typeof title !== 'undefined' ? title : 'Page Pengguna - DPMP4KB' %></title>
+    
+    <link rel="stylesheet" href="/assets/css/pengguna.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+<div class="container">
+
+    <aside class="sidebar" id="sidebar">
+        <div class="logo">
+            <img src="/assets/images/logo-magelang.png" alt="Logo">
+            <div class="logo-text">
+                <h2>DPMP4KB</h2>
+                <span>KOTA MAGELANG</span>
+            </div>
+        </div>
+
+        <nav class="nav-menu">
+            <a href="/dashboard" class="menu">
+                <i class="fa-solid fa-house"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="/daftar-pengaduan" class="menu">
+                <i class="fa-regular fa-file-lines"></i>
+                <span>Daftar Pengaduan</span>
+            </a>
+            <a href="/riwayat-percakapan" class="menu">
+                <i class="fa-regular fa-message"></i>
+                <span>Riwayat Percakapan</span>
+            </a>
+            <a href="/laporan" class="menu">
+                <i class="fa-regular fa-file"></i>
+                <span>Laporan</span>
+            </a>
+            <a href="/pengguna" class="menu active">
+                <i class="fa-regular fa-user"></i>
+                <span>Pengguna</span>
+            </a>
+        </nav>
+
+        <a href="/logout" class="logout">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span>Keluar</span>
+        </a>
+    </aside>
+
+    <main class="content">
+
+        <div class="user-header">
+            <div class="header-title">
+                <h1>Pengguna</h1>
+                <p>Daftar masyarakat yang terdaftar atau pernah membuat laporan</p>
+            </div>
+            <div class="header-controls">
+                <div class="search-input-wrapper">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="searchInput" class="control-input" placeholder="Cari Nama, WhatsApp, Alamat">
+                </div>
+                <button class="btn-add" type="button">
+                    + Tambah Penerima
+                </button>
+            </div>
+        </div>
+
+        <div class="table-section">
+            <table class="user-table">
+                <thead>
+                    <tr>
+                        <th width="5%">NO</th>
+                        <th width="18%">Nama Pengguna</th>
+                        <th width="17%">No WhatsApp</th>
+                        <th width="28%">Alamat</th>
+                        <th width="12%">Total Laporan</th>
+                        <th width="15%">Terakhir Melapor</th>
+                        <th width="5%">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody">
+                    <% 
+                        const listPengguna = (typeof dataPengguna !== 'undefined' && Array.isArray(dataPengguna)) ? dataPengguna : []; 
+                    %>
+                    <% if (listPengguna.length === 0) { %>
+                        <tr class="empty-row">
+                            <td colspan="7" align="center" style="padding: 30px; color: #888; font-weight: 500;">
+                                <i class="fa-solid fa-database" style="margin-right: 8px;"></i> 
+                                Belum ada data pelapor yang masuk dari Chatbot AI Gemini.
+                            </td>
+                        </tr>
+                    <% } else { %>
+                        <% listPengguna.forEach((user, index) => { %>
+                            <tr class="user-row">
+                                <td align="center"><strong><%= index + 1 %></strong></td>
+                                <td class="user-name"><%= user.nama || user.name || '-' %></td>
+                                <td class="user-wa"><strong><%= user.nomor_wa || user.no_wa || user.whatsapp || '-' %></strong></td>
+                                <td class="address-col user-address"><%= user.alamat || user.address || '-' %></td>
+                                <td align="center"><strong><%= typeof user.total_laporan !== 'undefined' ? user.total_laporan : (user.total_pengaduan || 0) %></strong></td>
+                                <td>
+                                    <% 
+                                        const rawDate = user.terakhir_melapor || user.last_reported || user.updated_at;
+                                        let formattedDate = '-';
+                                        if (rawDate) {
+                                            const d = new Date(rawDate);
+                                            if (!isNaN(d.getTime())) {
+                                                formattedDate = d.toLocaleDateString('id-ID', {
+                                                    day: 'numeric',
+                                                    month: 'long',
+                                                    year: 'numeric',
+                                                    hour: '2-digit',
+                                                    minute: '2-digit'
+                                                });
+                                            }
+                                        }
+                                    %>
+                                    <%= formattedDate %>
+                                </td>
+                                <td align="center">
+                                    <% const userId = user.id || user._id || index + 1; %>
+                                    <a href="/pengguna/<%= userId %>" class="btn-view" style="display: inline-flex; align-items: center; justify-content: center; text-decoration: none;">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination-container">
+            <button class="page-box font-nav" type="button">&lt;</button>
+            <button class="page-box active" type="button">1</button>
+            <button class="page-box" type="button">2</button>
+            <button class="page-box font-nav" type="button">&gt;</button>
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('searchInput');
+    const tableBody = document.getElementById('userTableBody');
+
+    if (searchInput && tableBody) {
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            const rows = tableBody.querySelectorAll('.user-row');
+
+            rows.forEach(row => {
+                const name = row.querySelector('.user-name')?.textContent.toLowerCase() || '';
+                const wa = row.querySelector('.user-wa')?.textContent.toLowerCase() || '';
+                const address = row.querySelector('.user-address')?.textContent.toLowerCase() || '';
+
+                if (name.includes(query) || wa.includes(query) || address.includes(query)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,62 @@
+Langkah 1: Jalankan Database (XAMPP)
+Sebelum menyalakan codingan Python, database harus aktif terlebih dahulu agar tidak terjadi error koneksi.
+
+Buka aplikasi XAMPP Control Panel di laptop kamu.
+
+Klik tombol Start pada bagian Apache.
+
+Klik tombol Start pada bagian MySQL.
+(Pastikan kedua teks tersebut sudah berubah warna menjadi hijau).
+
+Langkah 2: Aktifkan Lingkungan (Environment) di Anaconda Prompt
+Buka Windows Start Menu, cari dan buka Anaconda Prompt.
+
+Masuk ke folder tempat kamu menyimpan file skripsi/codingan chatbot ini. Gunakan perintah cd.
+
+Contoh jika folder codinganmu ada di Drive D dengan nama folder 'chatbot':
+
+Bash
+d:
+cd chatbot
+Aktifkan Virtual Environment tempat kamu menginstal pustaka (library) skripsimu kemarin (misal nama environment-nya vendenf atau nama lainnya):
+
+Bash
+conda activate nama_environment_kamu
+(Jika kamu kemarin menginstalnya langsung di environment dasar, abaikan langkah nomor 3 ini).
+
+Langkah 3: Nyalakan Server Backend (FastAPI / Uvicorn)
+Di dalam Anaconda Prompt yang foldernya sudah sesuai tadi, ketik perintah ini untuk menghidupkan server Python kamu:
+
+Bash
+uvicorn main:app --reload
+Tunggu sampai muncul tulisan hijau: Application startup complete. dan Uvicorn running on http://127.0.0.1:8000.
+
+Penting: Jangan tutup jendela Anaconda Prompt ini. Biarkan dia terus terbuka dan berjalan di latar belakang.
+
+Langkah 4: Nyalakan Jalur Online (Ngrok)
+Karena Fonnte berada di internet (cloud), dia butuh jalur khusus untuk menembak laptop lokal kamu. Kita gunakan Ngrok.
+
+Buka jendela Anaconda Prompt baru (atau buka Command Prompt biasa).
+
+Jalankan perintah Ngrok untuk membuka jalur port 8000:
+
+Bash
+ngrok http 8000
+Cari baris yang bertuliskan Forwarding, lalu salin (copy) alamat URL Ngrok yang baru (yang berakhiran .ngrok-free.dev).
+
+Contoh: https://whoopee-outer-voicing.ngrok-free.dev
+
+Langkah 5: Tempel URL Ngrok Baru ke Dashboard Fonnte
+Setiap kali Ngrok dimatikan dan dinyalakan lagi, alamat URL-nya pasti akan selalu berubah. Maka kita wajib memperbaruinya di Fonnte:
+
+Buka browser, masuk ke Dashboard Fonnte (md.fonnte.com).
+
+Klik menu Device, lalu klik Edit pada nomor perangkat bot kamu.
+
+Pada kolom Webhook ?, hapus alamat URL yang lama, lalu paste (tempel) alamat URL Ngrok baru yang kamu salin di Langkah 4 tadi.
+
+PENTING: Pastikan di ujung alamat URL tersebut kamu tambahkan teks /whatsapp.
+
+Contoh hasil akhir isi kolomnya: https://whoopee-outer-voicing.ngrok-free.dev/whatsapp
+
+Gulir ke bawah, lalu klik Save atau Update.

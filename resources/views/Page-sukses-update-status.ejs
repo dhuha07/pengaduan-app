@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= typeof title !== 'undefined' ? title : 'Status Berhasil Diperbarui' %></title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #f4f6fb;
+            overflow: hidden;
+        }
+
+        .overlay {
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.55);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .success-modal {
+            width: 520px;
+            background: #ffffff;
+            border-radius: 25px;
+            padding: 50px 40px;
+            text-align: center;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+            animation: popup 0.4s ease;
+        }
+
+        .check-wrapper {
+            width: 110px;
+            height: 110px;
+            margin: auto;
+            border-radius: 50%;
+            border: 6px solid #18b451;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: scaleUp 0.5s ease;
+        }
+
+        .check-icon {
+            font-size: 55px;
+            color: #18b451;
+            opacity: 0;
+            transform: scale(0.5);
+            animation: checkAnim 0.5s ease forwards;
+            animation-delay: 0.3s;
+        }
+
+        .success-modal h2 {
+            margin-top: 30px;
+            font-size: 34px;
+            color: #111111;
+        }
+
+        .success-modal p {
+            margin-top: 10px;
+            font-size: 17px;
+            color: #666666;
+            line-height: 1.6;
+        }
+
+        .ok-btn {
+            margin-top: 35px;
+            width: 180px;
+            height: 55px;
+            border: none;
+            border-radius: 14px;
+            background: #18b451;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .ok-btn:hover {
+            background: #129542;
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes popup {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes scaleUp {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        @keyframes checkAnim {
+            from {
+                opacity: 0;
+                transform: scale(0.3) rotate(-20deg);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .success-modal {
+                width: 90%;
+                padding: 40px 25px;
+            }
+
+            .success-modal h2 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Container Data Tersembunyi untuk Oper Variabel EJS ke Client JS -->
+    <div id="pageConfig" 
+         data-redirect="<%= typeof redirectUrl !== 'undefined' ? redirectUrl : '' %>" 
+         data-id="<%= typeof id !== 'undefined' ? id : '' %>" 
+         style="display: none;"></div>
+
+    <div class="overlay">
+        <div class="success-modal">
+            <div class="check-wrapper">
+                <i class="fa-solid fa-check check-icon"></i>
+            </div>
+
+            <h2><%= typeof messageTitle !== 'undefined' ? messageTitle : 'Status Berhasil Diperbarui' %></h2>
+
+            <p>
+                <%= typeof messageBody !== 'undefined' ? messageBody : 'Perubahan status laporan berhasil disimpan dan telah diperbarui oleh admin.' %>
+            </p>
+
+            <button class="ok-btn" id="btnOk" onclick="goBack()">OK</button>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            const config = document.getElementById('pageConfig').dataset;
+            const urlParams = new URLSearchParams(window.location.search);
+            const queryId = urlParams.get('id');
+
+            // 1. Jika controller mengirimkan parameter redirectUrl eksplisit
+            if (config.redirect) {
+                window.location.href = config.redirect;
+                return;
+            }
+
+            // 2. Jika ada ID dari EJS atau Query Parameter (e.g. /detail-pengaduan/123)
+            const targetId = config.id || queryId;
+            if (targetId) {
+                window.location.href = `/detail-pengaduan/${targetId}`;
+                return;
+            }
+
+            // 3. Fallback: Kembali ke daftar pengaduan atau history browser
+            if (document.referrer && !document.referrer.includes('/update-status')) {
+                window.location.href = document.referrer;
+            } else {
+                window.location.href = '/daftar-pengaduan';
+            }
+        }
+    </script>
+
+</body>
+</html>

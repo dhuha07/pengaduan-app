@@ -1,0 +1,283 @@
+/* ==========================================================================
+   RESET & STRUCTURE BASE
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: #ffffff;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* ==========================================================================
+   SIDEBAR COMPONENT (Match Precision)
+   ========================================================================== */
+.sidebar {
+    width: 280px;
+    background-color: #1a4099;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 32px 24px;
+    flex-shrink: 0;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 50px;
+}
+
+.logo img {
+    width: 48px;
+    height: auto;
+}
+
+.logo-text h2 {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.logo-text span {
+    font-size: 11px;
+    color: #cbd5e1;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+}
+
+.nav-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.menu {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 20px;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.menu.active {
+    background-color: #13a453;
+}
+
+.logout {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 20px;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   MAIN WORKSPACE AREA
+   ========================================================================== */
+.content {
+    flex: 1;
+    padding: 40px;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+}
+
+/* HEADER CONTROLS & SEARCH */
+.user-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+}
+
+.header-title h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #000000;
+}
+
+.header-title p {
+    font-size: 15px;
+    color: #000000;
+    margin-top: 2px;
+}
+
+.header-controls {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 14px;
+    font-size: 14px;
+    color: #666666;
+}
+
+.control-input {
+    width: 280px;
+    padding: 8px 12px 8px 38px;
+    border: 1px solid #000000;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    color: #000000;
+    outline: none;
+}
+
+.control-input::placeholder {
+    color: #999999;
+}
+
+.btn-add {
+    padding: 8px 16px;
+    background-color: #13a453;
+    border: none;
+    color: #ffffff;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* ==========================================================================
+   USER DATA TABLE STYLE
+   ========================================================================== */
+.table-section {
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+    background: #ffffff;
+    overflow: hidden;
+    margin-bottom: 40px;
+}
+
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.user-table th {
+    background-color: #d9d9d9;
+    color: #000000;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 16px 12px;
+    border-bottom: 1px solid #cccccc;
+    text-align: left;
+}
+
+.user-table th:first-child,
+.user-table th:nth-child(5),
+.user-table th:last-child {
+    text-align: center;
+}
+
+.user-table td {
+    padding: 20px 12px;
+    font-size: 14px;
+    color: #000000;
+    border-bottom: 1px solid #cccccc;
+    vertical-align: middle;
+}
+
+/* Penyesuaian khusus teks alamat agar rapi meliuk */
+.user-table td.address-col {
+    font-size: 13px;
+    line-height: 1.4;
+    max-width: 250px;
+}
+
+.user-table td strong {
+    font-weight: 600;
+}
+
+.user-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Tombol Aksi Mata Minimalis */
+.btn-view {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #666666;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-view:hover {
+    color: #000000;
+}
+
+/* ==========================================================================
+   PAGINATION COMPONENT
+   ========================================================================== */
+.pagination-container {
+    margin-top: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 10px;
+}
+
+.page-box {
+    width: 36px;
+    height: 36px;
+    border: 1px solid #000000;
+    background-color: #ffffff;
+    color: #000000;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 2px;
+}
+
+.page-box.font-nav {
+    font-weight: 900;
+}
+
+.page-box.active {
+    background-color: #13a453;
+    border-color: #13a453;
+    color: #ffffff;
+}
+
+.page-dots {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #000000;
+    padding: 0 4px;
+}

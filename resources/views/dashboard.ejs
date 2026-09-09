@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin DPMP4KB</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/dashboard.css">
+    
+    <!-- FONT -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- ICON -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="logo">
+            <img src="/assets/images/logo-magelang.png" alt="Logo DPMP4KB">
+            <div class="logo-text">
+                <h2>DPMP4KB</h2>
+                <span>KOTA MAGELANG</span>
+            </div>
+        </div>
+
+        <nav class="nav-menu">
+            <a href="/dashboard" class="menu active">
+                <i class="fa-solid fa-house"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="/daftar-pengaduan" class="menu">
+                <i class="fa-regular fa-file-lines"></i>
+                <span>Daftar Pengaduan</span>
+            </a>
+            <a href="/riwayat-percakapan" class="menu">
+                <i class="fa-regular fa-message"></i>
+                <span>Riwayat Percakapan</span>
+            </a>
+            <a href="/laporan" class="menu">
+                <i class="fa-regular fa-file"></i>
+                <span>Laporan</span>
+            </a>
+            <a href="/pengguna" class="menu">
+                <i class="fa-regular fa-user"></i>
+                <span>Pengguna</span>
+            </a>
+        </nav>
+
+        <a href="/login" class="logout">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span>Keluar</span>
+        </a>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="content">
+        <header class="topbar">
+            <button class="hamburger" id="toggleSidebar" aria-label="Toggle Navigation">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <div class="profile">
+                <i class="fa-regular fa-bell"></i>
+                <span>Admin</span>
+                <i class="fa-solid fa-chevron-down"></i>
+            </div>
+        </header>
+
+        <section class="page">
+            <h1>Dashboard</h1>
+
+            <!-- CARDS STATISTIK -->
+            <div class="stats">
+                <div class="card clickable" onclick="window.location.href='/daftar-pengaduan'">
+                    <h3>Laporan Masuk</h3>
+                    <div class="stat-body">
+                        <i class="fa-regular fa-user blue"></i>
+                        <div>
+                            <h2 id="statTotal">0</h2>
+                            <span>Total Laporan</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card clickable" onclick="window.location.href='/daftar-pengaduan'">
+                    <h3>Diproses</h3>
+                    <div class="stat-body">
+                        <i class="fa-solid fa-chart-column yellow"></i>
+                        <div>
+                            <h2 id="statProses">0</h2>
+                            <span>Sedang Diproses</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card clickable" onclick="window.location.href='/daftar-pengaduan'">
+                    <h3>Darurat</h3>
+                    <div class="stat-body">
+                        <i class="fa-solid fa-triangle-exclamation red"></i>
+                        <div>
+                            <h2 id="statDarurat">0</h2>
+                            <span>Perlu Tindakan</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card clickable" onclick="window.location.href='/daftar-pengaduan'">
+                    <h3>Selesai</h3>
+                    <div class="stat-body">
+                        <i class="fa-solid fa-check green"></i>
+                        <div>
+                            <h2 id="statSelesai">0</h2>
+                            <span>Total Selesai</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANEL INFORMASI -->
+            <div class="dashboard-grid">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>Notifikasi Penting</h2>
+                        <a href="/daftar-pengaduan">Lihat Semua</a>
+                    </div>
+                    <div id="notifContainer"></div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>Laporan Terbaru</h2>
+                        <a href="/daftar-pengaduan">Lihat Semua</a>
+                    </div>
+                    <div id="laporanTerbaruContainer"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<!-- JAVASCRIPT LOGIC -->
+<script>
+    function getAnyValue(item, keys) {
+        if (!item) return '';
+        for (const k of keys) {
+            if (item[k] !== undefined && item[k] !== null) return String(item[k]).trim();
+        }
+        return '';
+    }
+
+    function formatDate(rawDate) {
+        if (!rawDate) return new Date().toLocaleString('id-ID');
+        const parsed = new Date(rawDate);
+        return isNaN(parsed.getTime()) ? String(rawDate) : parsed.toLocaleString('id-ID');
+    }
+
+    async function fetchDashboardStats() {
+        try {
+            const response = await fetch('/api/pengaduan?_t=' + Date.now(), {
+                headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate' }
+            });
+
+            if (!response.ok) return;
+
+            const resData = await response.json();
+            const rawData = resData.success ? resData.data : (Array.isArray(resData) ? resData : []);
+
+            if (!Array.isArray(rawData)) return;
+
+            let total = rawData.length;
+            let selesai = 0;
+            let darurat = 0;
+
+            rawData.forEach(item => {
+                const statusVal = getAnyValue(item, ['status', 'status_validasi', 'status_laporan', 'state', 'kondisi']).toUpperCase();
+                const urgensiVal = getAnyValue(item, ['urgensi', 'tingkat_urgensi', 'prioritas', 'tingkat']).toUpperCase();
+
+                if (
+                    statusVal.includes('SELESAI') || 
+                    statusVal.includes('DONE') || 
+                    statusVal.includes('CLOSE') || 
+                    statusVal.includes('VERIFIED') || 
+                    statusVal.includes('RESOLV') || 
+                    statusVal === '3'
+                ) {
+                    selesai++;
+                }
+
+                if (
+                    urgensiVal.includes('DARURAT') || 
+                    urgensiVal.includes('HIGH') || 
+                    urgensiVal.includes('TINGGI') || 
+                    urgensiVal.includes('URGENT')
+                ) {
+                    darurat++;
+                }
+            });
+
+            let diproses = Math.max(0, total - selesai);
+
+            document.getElementById('statTotal').innerText = total;
+            document.getElementById('statSelesai').innerText = selesai;
+            document.getElementById('statProses').innerText = diproses;
+            document.getElementById('statDarurat').innerText = darurat;
+
+            renderNotif(rawData);
+            renderTerbaru(rawData);
+
+        } catch (err) {
+            console.error('[CLIENT ERROR] Fetch dashboard stats:', err);
+        }
+    }
+
+    function renderNotif(data) {
+        const container = document.getElementById('notifContainer');
+        const daruratList = data.filter(item => {
+            const u = getAnyValue(item, ['urgensi', 'tingkat_urgensi', 'prioritas', 'tingkat']).toUpperCase();
+            return u.includes('DARURAT') || u.includes('HIGH') || u.includes('TINGGI') || u.includes('URGENT');
+        }).slice(0, 3);
+
+        if (daruratList.length === 0) {
+            container.innerHTML = '<p style="color: #666; font-size: 14px; padding: 10px 0;">Tidak ada laporan darurat baru.</p>';
+            return;
+        }
+
+        container.innerHTML = daruratList.map(item => {
+            const kat = getAnyValue(item, ['kategori', 'kategori_kasus', 'jenis_kasus']) || 'Pengaduan';
+            const tgl = getAnyValue(item, ['created_at', 'created_date', 'tanggal']);
+            return `
+                <div class="notification">
+                    <i class="fa-solid fa-triangle-exclamation red"></i>
+                    <div>
+                        <h4>Laporan Darurat: ${kat}</h4>
+                        <small>${formatDate(tgl)}</small>
+                    </div>
+                </div>`;
+        }).join('');
+    }
+
+    function renderTerbaru(data) {
+        const container = document.getElementById('laporanTerbaruContainer');
+        const terbaruList = data.slice(0, 3);
+
+        if (terbaruList.length === 0) {
+            container.innerHTML = '<p style="color: #666; font-size: 14px; padding: 10px 0;">Belum ada laporan masuk.</p>';
+            return;
+        }
+
+        container.innerHTML = terbaruList.map(item => {
+            const idVal = getAnyValue(item, ['id', 'nomor_wa', 'id_pengaduan']) || '-';
+            const kat = getAnyValue(item, ['kategori', 'kategori_kasus', 'jenis_kasus']) || 'Laporan Umum';
+            const tgl = getAnyValue(item, ['created_at', 'created_date', 'tanggal']);
+            return `
+                <div class="report-item">
+                    <h3>#${idVal}</h3>
+                    <p>${kat}</p>
+                    <small>${formatDate(tgl)}</small>
+                </div>`;
+        }).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchDashboardStats();
+        setInterval(fetchDashboardStats, 2000);
+    });
+
+    window.addEventListener('focus', fetchDashboardStats);
+
+    const sidebar = document.getElementById("sidebar");
+    const toggleBtn = document.getElementById("toggleSidebar");
+
+    if (localStorage.getItem("sidebar") === "collapsed") {
+        sidebar.classList.add("collapsed");
+    }
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener("click", () => {
+            sidebar.classList.toggle("collapsed");
+            localStorage.setItem("sidebar", sidebar.classList.contains("collapsed") ? "collapsed" : "open");
+        });
+    }
+</script>
+
+</body>
+</html>

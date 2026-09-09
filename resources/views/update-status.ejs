@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Status Laporan - DPMP4KB</title>
+
+    <link rel="stylesheet" href="assets/css/update-status.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght=300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="logo">
+            <img src="assets/images/logo-magelang.png" alt="Logo DPMP4KB">
+            <div class="logo-text">
+                <h2>DPMP4KB</h2>
+                <span>KOTA MAGELANG</span>
+            </div>
+        </div>
+
+        <nav class="nav-menu">
+            <a href="dashboard.html" class="menu">
+                <i class="fa-solid fa-house"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="daftar-pengaduan.html" class="menu active">
+                <i class="fa-regular fa-file-lines"></i>
+                <span>Daftar Pengaduan</span>
+            </a>
+            <a href="riwayat-percakapan.html" class="menu">
+                <i class="fa-regular fa-message"></i>
+                <span>Riwayat Percakapan</span>
+            </a>
+            <a href="laporan.html" class="menu">
+                <i class="fa-regular fa-file"></i>
+                <span>Laporan</span>
+            </a>
+            <a href="pengguna.html" class="menu">
+                <i class="fa-regular fa-user"></i>
+                <span>Pengguna</span>
+            </a>
+        </nav>
+
+        <a href="index.html" class="logout">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span>Keluar</span>
+        </a>
+    </aside>
+
+    <!-- CONTENT -->
+    <main class="content">
+
+        <!-- HEADER -->
+        <div class="page-header">
+            <div class="header-left">
+                <button class="hamburger" id="toggleSidebar" type="button" aria-label="Toggle Sidebar">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div>
+                    <h1>Update Status Laporan</h1>
+                    <div class="breadcrumb">
+                        Dashboard / Daftar Pengaduan / Detail / Update Status
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CARD -->
+        <div class="form-card">
+
+            <!-- INFORMASI -->
+            <div class="report-info">
+                <h2>Informasi Laporan</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span>No. Laporan</span>
+                        <strong id="infoNoLaporan">#--</strong>
+                    </div>
+                    <div class="info-item">
+                        <span>Nama Pelapor</span>
+                        <strong id="infoNamaPelapor">--</strong>
+                    </div>
+                    <div class="info-item">
+                        <span>Jenis Kasus</span>
+                        <strong id="infoJenisKasus">--</strong>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- FORM (Submit ditangani event listener 'submit' native) -->
+            <form id="updateStatusForm" class="update-form">
+                <h2>Update Status</h2>
+
+                <div class="form-grid">
+                    <!-- STATUS -->
+                    <div class="form-group">
+                        <label for="selectStatus">Status <span>*</span></label>
+                        <select id="selectStatus" name="status_validasi" required>
+                            <option value="UNVERIFIED">Belum Diverifikasi (Unverified)</option>
+                            <option value="DIPROSES">Diproses</option>
+                            <option value="VERIFIED">Diverifikasi (Verified)</option>
+                            <option value="SELESAI">Selesai</option>
+                            <option value="REJECTED">Ditolak (Rejected)</option>
+                        </select>
+                    </div>
+
+                    <!-- PRIORITAS -->
+                    <div class="form-group">
+                        <label for="selectUrgensi">Prioritas <span>*</span></label>
+                        <select id="selectUrgensi" name="tingkat_urgensi" required>
+                            <option value="DARURAT">Darurat</option>
+                            <option value="NORMAL">Normal</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- CATATAN -->
+                <div class="form-group full">
+                    <label for="inputCatatan">Catatan Admin</label>
+                    <textarea id="inputCatatan" name="catatan_admin" placeholder="Tulis catatan tindak lanjut atau keterangan tambahan..."></textarea>
+                </div>
+
+                <!-- BUTTON -->
+                <div class="button-group">
+                    <a id="btnCancel" href="daftar-pengaduan.html" class="btn cancel">Batal</a>
+                    <button type="submit" class="btn save" id="saveBtn">Simpan</button>
+                </div>
+            </form>
+
+        </div>
+
+    </main>
+
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="success-modal" id="successModal">
+    <div class="success-box">
+        <div class="check-animation">
+            <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+                <path class="checkmark-check" fill="none" d="M14 27l7 7 16-16"/>
+            </svg>
+        </div>
+
+        <h2>Status Laporan berhasil diperbarui</h2>
+        <p>Perubahan status laporan berhasil diperbarui dalam database.</p>
+
+        <button type="button" class="ok-btn" id="okBtn">OK</button>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const reportId = urlParams.get('id');
+
+        const form = document.getElementById('updateStatusForm');
+        const saveBtn = document.getElementById('saveBtn');
+        const alertBox = document.getElementById('successModal');
+
+        // Sanitisasi dan Validasi ID
+        if (!reportId || isNaN(reportId)) { // Sesuaikan jika ID berbentuk UUID
+            alert('ID Laporan tidak valid.');
+            window.location.href = 'daftar-pengaduan.html';
+            return;
+        }
+
+        document.getElementById('btnCancel').href = `detail-pengaduan.html?id=${encodeURIComponent(reportId)}`;
+
+        // 1. Load Data
+        async function loadReportInfo() {
+            try {
+                const response = await fetch(`/api/pengaduan/${encodeURIComponent(reportId)}`, {
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+                
+                const result = await response.json();
+
+                if (result.success && result.data) {
+                    const data = result.data;
+                    document.getElementById('infoNoLaporan').textContent = `#${data.id || data.nomor_wa || '-'}`;
+                    document.getElementById('infoNamaPelapor').textContent = data.nama_pelapor || 'Anonim';
+                    document.getElementById('infoJenisKasus').textContent = data.kategori_kasus || '-';
+
+                    if (data.status_validasi) {
+                        document.getElementById('selectStatus').value = data.status_validasi.toUpperCase();
+                    }
+                    if (data.tingkat_urgensi) {
+                        document.getElementById('selectUrgensi').value = data.tingkat_urgensi.toUpperCase();
+                    }
+                    if (data.catatan_admin) {
+                        document.getElementById('inputCatatan').value = data.catatan_admin;
+                    }
+                } else {
+                    alert('Data pengaduan tidak ditemukan.');
+                    window.location.href = 'daftar-pengaduan.html';
+                }
+            } catch (error) {
+                console.error('Gagal memuat data pengaduan:', error);
+                alert('Gagal mengambil data pengaduan dari server.');
+            }
+        }
+
+        // 2. Event Listener Form Submit (Standar Form API & Mencegah Double Click)
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Kunci tombol submit
+            saveBtn.disabled = true;
+            const originalBtnText = saveBtn.textContent;
+            saveBtn.textContent = 'Menyimpan...';
+
+            const payload = {
+                status_validasi: document.getElementById('selectStatus').value,
+                tingkat_urgensi: document.getElementById('selectUrgensi').value,
+                catatan_admin: document.getElementById('inputCatatan').value.trim()
+            };
+
+            try {
+                const response = await fetch(`/api/pengaduan/${encodeURIComponent(reportId)}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    alertBox.classList.add("show");
+                } else {
+                    alert(`Gagal memperbarui status: ${result.message || 'Terjadi kesalahan sistem'}`);
+                }
+            } catch (error) {
+                console.error('Terjadi kesalahan saat menyimpan:', error);
+                alert('Gagal terhubung ke server. Periksa koneksi Anda.');
+            } finally {
+                // Mengembalikan status tombol
+                saveBtn.disabled = false;
+                saveBtn.textContent = originalBtnText;
+            }
+        });
+
+        document.getElementById("okBtn").addEventListener("click", () => {
+            window.location.href = `detail-pengaduan.html?id=${encodeURIComponent(reportId)}`;
+        });
+
+        // Toggle Sidebar Logik
+        const sidebar = document.getElementById("sidebar");
+        const toggleBtn = document.getElementById("toggleSidebar");
+
+        if (localStorage.getItem("sidebar") === "collapsed") {
+            sidebar?.classList.add("collapsed");
+        }
+
+        toggleBtn?.addEventListener("click", () => {
+            sidebar?.classList.toggle("collapsed");
+            localStorage.setItem("sidebar", sidebar?.classList.contains("collapsed") ? "collapsed" : "open");
+        });
+
+        // Eksekusi Load
+        loadReportInfo();
+    });
+</script>
+
+</body>
+</html>

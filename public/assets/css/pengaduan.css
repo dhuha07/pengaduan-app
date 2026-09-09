@@ -1,0 +1,442 @@
+/* =========================
+   RESET
+========================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:#f4f6fb;
+}
+
+/* =========================
+   LAYOUT
+========================= */
+
+.container{
+    display:flex;
+    min-height:100vh;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar{
+    width:270px;
+    background:#1f3f99;
+    color:white;
+    padding:30px 20px;
+    display:flex;
+    flex-direction:column;
+    transition:.3s;
+}
+
+/* COLLAPSE */
+
+.sidebar.collapsed{
+    width:90px;
+}
+
+.sidebar.collapsed .logo-text,
+.sidebar.collapsed .menu span,
+.sidebar.collapsed .logout span{
+    display:none;
+}
+
+.sidebar.collapsed .menu,
+.sidebar.collapsed .logout{
+    justify-content:center;
+}
+
+/* =========================
+   LOGO
+========================= */
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:50px;
+}
+
+.logo img{
+    width:55px;
+}
+
+.logo h2{
+    font-size:28px;
+    font-weight:700;
+}
+
+.logo span{
+    font-size:14px;
+    opacity:.8;
+}
+
+/* =========================
+   NAVIGATION
+========================= */
+
+nav{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.menu{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    padding:16px 18px;
+    border-radius:14px;
+    color:white;
+    text-decoration:none;
+    font-weight:500;
+    transition:.3s;
+}
+
+.menu:hover{
+    background:rgba(255,255,255,.1);
+}
+
+.menu.active{
+    background:#18b451;
+}
+
+/* =========================
+   LOGOUT
+========================= */
+
+.logout{
+    margin-top:auto;
+    display:flex;
+    align-items:center;
+    gap:15px;
+    padding:16px 18px;
+    border-radius:14px;
+    color:white;
+    text-decoration:none;
+    font-weight:500;
+    transition:.3s;
+}
+
+.logout:hover{
+    background:rgba(255,255,255,.1);
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content{
+    flex:1;
+    padding:35px;
+}
+
+/* =========================
+   PAGE HEADER
+========================= */
+
+.page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+.header-left{
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+.page-header h1{
+    font-size:42px;
+    font-weight:700;
+}
+
+.breadcrumb{
+    margin-top:8px;
+    color:#777;
+    font-size:14px;
+}
+
+/* =========================
+   PROFILE
+========================= */
+
+.profile{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    font-weight:600;
+}
+
+/* =========================
+   HAMBURGER
+========================= */
+
+.hamburger{
+    width:45px;
+    height:45px;
+    border:none;
+    border-radius:10px;
+    background:#fff;
+    cursor:pointer;
+    font-size:20px;
+    box-shadow:0 3px 10px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.hamburger:hover{
+    background:#f3f3f3;
+}
+
+/* =========================
+   FILTER
+========================= */
+
+.filter-box{
+    background:white;
+    padding:20px;
+    border-radius:20px;
+    box-shadow:0 5px 20px rgba(0,0,0,.05);
+
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+    flex-wrap:wrap;
+
+    margin-bottom:25px;
+}
+
+/* SEARCH */
+
+.search-box{
+    flex:1;
+    min-width:300px;
+    position:relative;
+}
+
+.search-box i{
+    position:absolute;
+    left:18px;
+    top:50%;
+    transform:translateY(-50%);
+    color:#999;
+}
+
+.search-box input{
+    width:100%;
+    height:55px;
+    border:1px solid #ddd;
+    border-radius:14px;
+    padding-left:50px;
+    font-size:15px;
+    outline:none;
+    transition:.3s;
+}
+
+.search-box input:focus{
+    border-color:#18b451;
+}
+
+/* FILTER BUTTON */
+
+.filter-actions{
+    display:flex;
+    gap:15px;
+}
+
+.filter-btn{
+    height:55px;
+    padding:0 20px;
+    border:1px solid #ddd;
+    border-radius:14px;
+    background:white;
+    cursor:pointer;
+    font-weight:500;
+    transition:.3s;
+}
+
+.filter-btn:hover{
+    background:#f5f5f5;
+}
+
+/* =========================
+   TABLE
+========================= */
+
+.table-wrapper{
+    background:white;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 5px 20px rgba(0,0,0,.05);
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+thead{
+    background:#f9fafc;
+}
+
+th{
+    text-align:left;
+    padding:20px;
+    font-size:14px;
+    color:#555;
+}
+
+td{
+    padding:20px;
+    border-top:1px solid #eee;
+    font-size:14px;
+}
+
+tbody tr{
+    transition:.3s;
+}
+
+tbody tr:hover{
+    background:#fafafa;
+}
+
+/* =========================
+   BADGE
+========================= */
+
+.badge{
+    padding:6px 12px;
+    border-radius:30px;
+    font-size:12px;
+    font-weight:600;
+}
+
+.danger{
+    background:#ffe4e4;
+    color:#ff3d3d;
+}
+
+.warning{
+    background:#fff4db;
+    color:#ff9800;
+}
+
+.success{
+    background:#ddffe9;
+    color:#17b85e;
+}
+
+.process{
+    background:#e7eeff;
+    color:#3867ff;
+}
+
+/* =========================
+   ACTION BUTTON
+========================= */
+
+.action-btn{
+    width:38px;
+    height:38px;
+    border-radius:10px;
+    background:#f5f6fb;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:#333;
+    text-decoration:none;
+    transition:.3s;
+}
+
+.action-btn:hover{
+    background:#e9ecf5;
+}
+
+/* =========================
+   PAGINATION
+========================= */
+
+.pagination{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    padding:25px;
+}
+
+.page-btn{
+    width:40px;
+    height:40px;
+    border:none;
+    border-radius:10px;
+    background:white;
+    border:1px solid #ddd;
+    cursor:pointer;
+    font-weight:600;
+    transition:.3s;
+}
+
+.page-btn:hover{
+    background:#f3f3f3;
+}
+
+.page-btn.active{
+    background:#18b451;
+    color:white;
+    border:none;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1100px){
+
+    .container{
+        flex-direction:column;
+    }
+
+    .sidebar{
+        width:100%;
+    }
+
+    table{
+        min-width:1000px;
+    }
+
+    .table-wrapper{
+        overflow:auto;
+    }
+
+}
+
+@media(max-width:768px){
+
+    .page-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:20px;
+    }
+
+    .filter-actions{
+        width:100%;
+        flex-direction:column;
+    }
+
+    .filter-btn{
+        width:100%;
+    }
+
+    .page-header h1{
+        font-size:32px;
+    }
+
+}
