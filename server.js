@@ -2,22 +2,12 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const http = require('http');
-const { Server } = require('socket.io');
 
 const db = require('./database/db');
 const appRoutes = require('./routes/routes');
 
 const app = express();
-const server = http.createServer(app);
-const io = new Server(server, { 
-    cors: { 
-        origin: '*',
-        methods: ['GET', 'POST']
-    } 
-});
 
-const PORT = process.env.PORT || 3000;
 const FONNTE_TOKEN = process.env.FONNTE_TOKEN || '';
 
 /* ==========================================================================
@@ -42,7 +32,7 @@ app.use('/api', (req, res, next) => {
 });
 
 /* ==========================================================================
-   2. HANDLER WEBHOOK & SEND MESSAGE (FONNTE & SOCKET.IO)
+   2. HANDLER WEBHOOK & SEND MESSAGE (FONNTE)
    ========================================================================== */
 const handleFonnteWebhook = async (req, res) => {
     try {
@@ -75,14 +65,6 @@ const handleFonnteWebhook = async (req, res) => {
             [idPengaduan, message]
         );
 
-        io.emit('pesan_baru', {
-            id: insertedMsg.insertId,
-            id_pengaduan: idPengaduan,
-            pengirim: 'user',
-            pesan: message,
-            created_at: new Date()
-        });
-
         return res.status(200).json({ status: true });
     } catch (err) {
         console.error('[WEBHOOK ERROR]', err.message);
@@ -109,7 +91,7 @@ const sendMessageHandler = async (req, res) => {
             return res.status(404).json({ success: false, message: 'Data pengaduan tidak ditemukan.' });
         }
 
-        const [insertedMsg] = await db.query(
+        await db.query(
             'INSERT INTO pesan_percakapan (id_pengaduan, pengirim, pesan) VALUES (?, "admin", ?)',
             [parsedId, pesan]
         );
@@ -132,14 +114,6 @@ const sendMessageHandler = async (req, res) => {
         } else {
             console.warn('[WARNING] FONNTE_TOKEN belum diatur di .env. Pesan tersimpan di DB tetapi tidak dikirim ke WA.');
         }
-
-        io.emit('pesan_baru', {
-            id: insertedMsg.insertId,
-            id_pengaduan: parsedId,
-            pengirim: 'admin',
-            pesan: pesan,
-            created_at: new Date()
-        });
 
         return res.json({ success: true, message: 'Pesan berhasil dikirim.', fonnte: fonnteResult });
     } catch (err) {
@@ -172,7 +146,7 @@ app.use('/api', (req, res) => {
     });
 });
 
-// Fallback Render View 404 (Untuk menangani halaman yang tidak ditemukan)
+// Fallback Render View 404
 app.use(async (req, res) => {
     try {
         const [rows] = await db.query('SELECT * FROM pengaduan ORDER BY id DESC');
@@ -195,8 +169,13 @@ app.use((err, req, res, next) => {
 });
 
 /* ==========================================================================
-   5. LISTEN / START SERVER
+   5. LISTEN / EXPORT FOR VERCEL
    ========================================================================== */
-server.listen(PORT, () => {
-    console.log(`Server aktif berjalan pada http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== 'production') {
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log(`Server lokal berjalan pada http://localhost:${PORT}`);
+    });
+}
+
+module.exports = app;
